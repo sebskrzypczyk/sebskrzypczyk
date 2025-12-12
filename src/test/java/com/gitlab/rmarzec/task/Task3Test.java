@@ -14,21 +14,25 @@ import java.time.Duration;
 public class Task3Test {
 
     @Test
-    public void Task3Test(){
+    public void Task3Test() {
         DriverFactory driverFactory = new DriverFactory();
         WebDriver webDriver = driverFactory.initDriver();
 
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        webDriver.get("https://www.google.com/");
 
         WebElement acceptGoogleCookiesButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("L2AGLb")));
         if (acceptGoogleCookiesButton.isDisplayed()) {
             acceptGoogleCookiesButton.click();
         }
 
-        WebElement searchTextarea = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".SDkEP textarea")));
+        WebElement searchTextarea = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(".SDkEP textarea")));
         searchTextarea.sendKeys("W3Schools");
 
-        WebElement luckyButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".aajZCb .RNmpXc")));
+        WebElement luckyButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(".aajZCb .RNmpXc")));
         luckyButton.click();
 
         String url = "https://www.w3schools.com/tags/tag_select.asp";
@@ -40,17 +44,19 @@ public class Task3Test {
         webDriver.switchTo().frame(iframeCookies);
 
         WebElement acceptW3schoolsCookiesButton = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector("#fast-cmp-container .fast-cmp-button-primary")));
+                ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector("#fast-cmp-container .fast-cmp-button-primary")));
         if (acceptW3schoolsCookiesButton.isDisplayed()) {
             acceptW3schoolsCookiesButton.click();
         }
 
         webDriver.switchTo().defaultContent();
 
-        WebElement tryItYourselfButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Try it Yourself')]")));
+        WebElement tryItYourselfButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[contains(text(),'Try it Yourself')]")));
         tryItYourselfButton.click();
 
-        Object[] windowHandles=webDriver.getWindowHandles().toArray();
+        Object[] windowHandles = webDriver.getWindowHandles().toArray();
         webDriver.switchTo().window((String) windowHandles[1]);
 
         WebElement iframeResult = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("iframeResult")));

@@ -9,13 +9,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
 public class Task2Test {
     @Test
-    public void Task2Test(){
+    public void Task2Test() {
         DriverFactory driverFactory = new DriverFactory();
         WebDriver webDriver = driverFactory.initDriver();
 
@@ -30,22 +33,22 @@ public class Task2Test {
         List<WebElement> allLanguagesList = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                 By.cssSelector(".uls-language-list li")));
 
-        List<WebElement> uniqueLanguagesList = allLanguagesList.stream()
-                .collect(Collectors.toMap(
-                        link -> link.getAttribute("href"),
-                        link -> link,
-                        (k1, k2) -> k1,
-                        java.util.LinkedHashMap::new
-                ))
-                .values()
-                .stream()
-                .collect(Collectors.toList());
+        Map<String, WebElement> uniqueElementsMap = new HashMap<>();
+
+        for (WebElement element : allLanguagesList) {
+            String text = element.getText();
+            // This ensures only the first WebElement for a given text is stored, removing duplicates.
+            uniqueElementsMap.putIfAbsent(text, element);
+        }
+
+        // 2. Convert the Map values (the unique WebElements) into a List.
+        List<WebElement> uniqueLanguagesList = new ArrayList<>(uniqueElementsMap.values());
 
         System.out.println("Lista języków:");
         for (WebElement language : uniqueLanguagesList) {
             String languageName = language.getText();
-            String displayUrl = language.getAttribute("href");
-            System.out.print(" - " + languageName);
+            String displayUrl = language.findElement(By.cssSelector("a")).getAttribute("href");
+            System.out.print(languageName);
             System.out.println(languageName.equals("English") ? " -> " + displayUrl : "");
         }
 
